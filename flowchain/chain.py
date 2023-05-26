@@ -95,15 +95,3 @@ def enable_tensor_chaining(mappings=None):
     register_tensor_chaining(tf.Tensor, mappings)
     register_tensor_chaining(tf.RaggedTensor, mappings)
     register_tensor_chaining(tf.SparseTensor, mappings)
-
-    try:
-        from keras.engine.keras_tensor import KerasTensor
-        register_tensor_chaining(KerasTensor, mappings)
-    except ImportError:
-        pass
-
-    try:
-        from keras.src.engine.keras_tensor import KerasTensor
-        register_tensor_chaining(KerasTensor, mappings)
-    except ImportError:
-        pass
