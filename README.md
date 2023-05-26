@@ -2,6 +2,11 @@
 
 Extensive and simple tensor method chaining for TensorFlow
 
+Install via:
+```
+pip install flowchain
+```
+
 Add only 2 lines of code at the top of your code!
 ```python
 from flowchain import enable_tensor_chaining
