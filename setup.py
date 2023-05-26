@@ -16,9 +16,7 @@ setup(
         'gpu': ['tensorflow>=2.4'],
         'cpu': ['tensorflow-cpu>=2.4']
     },
-    install_requires=[
-        'packaging'
-    ],
+    install_requires=[],
     keywords=[
         'machine learning',
         'deep learning',
