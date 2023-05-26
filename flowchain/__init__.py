@@ -1,0 +1,1 @@
+from flowchain.chain import enable_tensor_chaining
