@@ -15,9 +15,14 @@ _DEFAULT_MODULE_WHITELIST = [
     'tensorflow.python.ops.sort_ops',
     ('tensorflow.python.ops.array_ops', ['diag', 'diag_part']),
     ('tensorflow.python.ops.linalg_ops', ['!eye']),
-    ('tensorflow.python.ops.nn_impl', ['l2_normalize', 'normalize']),
+    ('tensorflow.python.ops.nn_impl', [
+        'l2_normalize', 'normalize', 'swish', 'batch_normalization', 'batch_norm_with_global_normalization'
+    ]),
+    ('tensorflow.python.ops.nn_ops', [
+        '!softmax_cross_entropy_with_logits', '!sparse_softmax_cross_entropy_with_logits',
+    ])
 ]
-_DEFAULT_OBJECT_MAPPINGS = [(obj, _DEFAULT_MODULE_WHITELIST) for obj in [tf, tf.linalg, tf.math]]
+_DEFAULT_OBJECT_MAPPINGS = [(obj, _DEFAULT_MODULE_WHITELIST) for obj in [tf, tf.linalg, tf.math, tf.nn]]
 
 
 def _is_allowed(func: Callable, func_name: str, whitelist: List[Union[str, Tuple[str, List[str]]]]):
