@@ -3,8 +3,6 @@ import tensorflow as tf
 
 from inspect import getmembers, isfunction
 from typing import Any, Optional, List, Callable, Tuple, Union
-from tensorflow.python.framework.ops import Tensor
-from keras.engine.keras_tensor import KerasTensor
 
 _TENSOR_FN_CACHE = dict()
 _DEFAULT_MODULE_WHITELIST = [
@@ -72,25 +70,40 @@ def _retrieve_tf_func(obj: Any = tf, module_whitelist: Optional[List[str]] = Non
     return funcs
 
 
-def enable_tensor_chaining(mappings=None):
+def register_tensor_chaining(obj, mappings=None):
+    global _TENSOR_FN_CACHE
+
     if mappings is None:
         mappings = _DEFAULT_OBJECT_MAPPINGS
 
-    def _register_tensor_chaining(obj):
-        global _TENSOR_FN_CACHE
+    key = str(obj)
+    if key in _TENSOR_FN_CACHE:
+        return False
+    func_map = dict()
+    for orig, whitelist in mappings:
+        func_map.update(_retrieve_tf_func(orig, whitelist))
+    for tf_name, tf_func in func_map.items():
+        if hasattr(obj, tf_name) or 'type' == tf_name:
+            continue
+        setattr(obj, tf_name, tf_func)
+    _TENSOR_FN_CACHE[key] = func_map
+    return True
 
-        key = str(obj)
-        if key in _TENSOR_FN_CACHE:
-            return False
-        func_map = dict()
-        for orig, whitelist in mappings:
-            func_map.update(_retrieve_tf_func(orig, whitelist))
-        for tf_name, tf_func in func_map.items():
-            if hasattr(obj, tf_name) or 'type' == tf_name:
-                continue
-            setattr(obj, tf_name, tf_func)
-        _TENSOR_FN_CACHE[key] = func_map
-        return True
 
-    _register_tensor_chaining(Tensor)
-    _register_tensor_chaining(KerasTensor)
+def enable_tensor_chaining(mappings=None):
+    register_tensor_chaining(tf.Variable, mappings)
+    register_tensor_chaining(tf.Tensor, mappings)
+    register_tensor_chaining(tf.RaggedTensor, mappings)
+    register_tensor_chaining(tf.SparseTensor, mappings)
+
+    try:
+        from keras.engine.keras_tensor import KerasTensor
+        register_tensor_chaining(KerasTensor, mappings)
+    except ImportError:
+        pass
+
+    try:
+        from keras.src.engine.keras_tensor import KerasTensor
+        register_tensor_chaining(KerasTensor, mappings)
+    except ImportError:
+        pass
