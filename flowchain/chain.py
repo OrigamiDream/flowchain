@@ -57,9 +57,15 @@ def _retrieve_tf_func(obj: Any = tf, module_whitelist: Optional[List[str]] = Non
         def _invoke(*args, **kwargs):
             return fn(*args, **kwargs)
 
+        def _replace_parameter_to_self(signature: inspect.Signature):
+            parameters = signature.parameters
+            self_param = inspect.Parameter('self', kind=inspect.Parameter.POSITIONAL_OR_KEYWORD)
+            return signature.replace(parameters=(self_param,) + tuple(parameters.values())[1:])
+
         _invoke.__doc__ = fn.__doc__
         _invoke.__name__ = fn.__name__
-        _invoke.__signature__ = inspect.signature(fn)
+        _invoke.__signature__ = _replace_parameter_to_self(inspect.signature(fn))
+        _invoke.__qualname__ = fn.__qualname__
         return _invoke
 
     tf_funcs = getmembers(obj, isfunction)
@@ -67,9 +73,7 @@ def _retrieve_tf_func(obj: Any = tf, module_whitelist: Optional[List[str]] = Non
     for name, func in tf_funcs:
         if not _is_allowed(func, name, module_whitelist):
             continue
-
-        signature = inspect.signature(func)
-        if len(signature.parameters) == 0:
+        if len(inspect.signature(func).parameters) == 0:
             continue
         funcs[name] = _tf_func_wrap(func)
     return funcs
