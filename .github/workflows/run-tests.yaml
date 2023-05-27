@@ -4,7 +4,7 @@ on: [push, workflow_call]
 
 jobs:
   tests:
-    name: Run tests over matrices
+    name: Run tests
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,6 +19,8 @@ jobs:
             python-version: "3.10"
           - tensorflow-version: "2.12.0"  # tensorflow 2.12.0 drops Python 3.7 support
             python-version: "3.7"
+        include:
+          - tensorflow-version: ""
 
     steps:
       - uses: actions/checkout@v3
@@ -30,6 +32,6 @@ jobs:
         run: |
           python -m pip install -U pip setuptools wheel
           pip install tensorflow==${{ matrix.tensorflow-version }}
-          pip install pytest
+          pip install -U protobuf==3.20.0 pytest
       - name: Run tests
         run: pytest
