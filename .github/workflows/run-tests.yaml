@@ -19,8 +19,6 @@ jobs:
             python-version: "3.10"
           - tensorflow-version: "2.12.0"  # tensorflow 2.12.0 drops Python 3.7 support
             python-version: "3.7"
-        include:
-          - tensorflow-version: ""
 
     steps:
       - uses: actions/checkout@v3
