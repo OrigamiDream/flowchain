@@ -2,6 +2,10 @@
 
 Extensive and simple tensor method chaining for TensorFlow
 
+This package requires Python >= 3.7 and uses some Python magics for extensive injection. Therefore, there could be some unexpected behaviour among method chaining. If you have experienced such behaviours, please feel free to open new issue in this repo!
+
+Currently, I am still finding a way to support code completion for IDEs like PyCharm, Visual Studio Code, etc.
+
 Install via:
 ```
 pip install flowchain
