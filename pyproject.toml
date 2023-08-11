@@ -18,24 +18,24 @@ classifiers = [
     "Intended Audience :: Developers",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.11"
-protobuf = "<=3.20.0"
-tensorflow = { version = "^2.4", optional = true }
-tensorflow-cpu = { version = "^2.4", optional = true }
-tensorflow-macos = { version = ">=2.9,<2.10", optional = true }
-tensorflow-metal = { version = ">=0.5,<0.6", optional = true }
-
-[tool.poetry.extras]
-gpu = ["tensorflow"]
-cpu = ["tensorflow-cpu"]
-mac = ["tensorflow-macos", "tensorflow-metal"]
+python = ">=3.8,<3.12"
+numpy = ">=1.22,<=1.24.3"
+tensorflow = [
+    { version = "^2.13.0", platform = "darwin", markers = "platform_machine == 'arm64'" },
+    { version = "^2.4.0", platform = "linux" },
+    { version = ">=2.4.0,<2.11.0", platform = "win32" },
+]
+tensorflow-macos = [
+    { version = "^2.13.0", platform = "darwin", markers = "platform_machine == 'arm64'" },
+    { version = "^2.9.0", platform = "darwin", markers = "platform_machine != 'arm64'" },
+]
+tensorflow-metal = { version = "^0.5.0", platform = "darwin", markers = "platform_machine != 'arm64'" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
