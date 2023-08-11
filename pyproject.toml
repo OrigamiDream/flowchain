@@ -1,0 +1,45 @@
+[tool.poetry]
+name = "flowchain"
+version = "0.0.8"
+description = "Flowchain - Method Chaining for TensorFlow"
+authors = ["OrigamiDream <hello@origamidream.me>"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/OrigamiDream/flowchain"
+keywords = [
+    "machine-learning",
+    "deep-learning",
+    "tensorflow",
+    "method-chaining",
+    "extension"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.11"
+protobuf = "<=3.20.0"
+tensorflow = { version = "^2.4", optional = true }
+tensorflow-cpu = { version = "^2.4", optional = true }
+tensorflow-macos = { version = ">=2.9,<2.10", optional = true }
+tensorflow-metal = { version = ">=0.5,<0.6", optional = true }
+
+[tool.poetry.extras]
+gpu = ["tensorflow"]
+cpu = ["tensorflow-cpu"]
+mac = ["tensorflow-macos", "tensorflow-metal"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
