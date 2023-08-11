@@ -33,9 +33,12 @@ tensorflow = [
 ]
 tensorflow-macos = [
     { version = "^2.13.0", platform = "darwin", markers = "platform_machine == 'arm64'" },
-    { version = "^2.9.0", platform = "darwin", markers = "platform_machine != 'arm64'" },
+    { version = "^2.9.0", platform = "darwin", markers = "platform_machine != 'arm64'", optional = true },
 ]
 tensorflow-metal = { version = "^0.5.0", platform = "darwin", markers = "platform_machine != 'arm64'" }
+
+[tool.poetry.extras]
+mac-intel = ["tensorflow-macos"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
